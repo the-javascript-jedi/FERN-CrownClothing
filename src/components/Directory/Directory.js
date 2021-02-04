@@ -44,6 +44,11 @@ export class Directory extends Component {
   render() {
     return (
       <div className="directory-menu">
+        {this.state.sections.map(({ id, ...otherSectionProps }) => (
+          <MenuItem key={id} {...otherSectionProps}></MenuItem>
+        ))}
+        {/* 
+        we can spread the other prosps because both have the same name
         {this.state.sections.map(({ title, id, imageUrl, size }) => (
           <MenuItem
             key={id}
@@ -51,7 +56,7 @@ export class Directory extends Component {
             imageUrl={imageUrl}
             size={size}
           ></MenuItem>
-        ))}
+        ))} */}
       </div>
     );
   }
