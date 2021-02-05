@@ -1,0 +1,27 @@
+.header {
+  height: 70px;
+  width: 100%;
+  display: flex;
+  // .logo-container and .options  will  be in opposite ends
+  justify-content: space-between;
+  margin-bottom: 25px;
+
+  .logo-container {
+    height: 100%;
+    width: 70px;
+    padding: 25px;
+  }
+
+  .options {
+    // .options  will be 50% of the header
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    .option {
+      padding: 10px 15px;
+    }
+  }
+}
