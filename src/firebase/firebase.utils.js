@@ -14,6 +14,35 @@ var config = {
   appId: "1:524556700563:web:a16f905575910a85717666",
   measurementId: "G-86S4ZPZ1MR",
 };
+// making api request so async function
+// userAuth - userauth object is returned from firebase when we login
+//additionalData -
+export const createUserProfileDocument = async (userAuth, additionalData) => {
+  // if no user Auth object we must signout
+  if (!userAuth) return;
+  // find the user id
+  const userRef = firestore.doc(`users/${userAuth.uid}`);
+  //check snapshot if userAuth already exists in our db
+  const snapShot = await userRef.get();
+  console.log("snapShot", snapShot);
+  if (!snapShot.exists) {
+    // use documentRef to store data if snapshot does not exist
+    //create the data usinfg our userAuth object from google firebase
+    const { displayName, email } = userAuth;
+    const createdAt = new Date();
+    try {
+      await userRef.set({
+        displayName,
+        email,
+        createdAt,
+        ...additionalData,
+      });
+    } catch (error) {
+      console.log("error creating user", error.message);
+    }
+  }
+  return userRef;
+};
 // initialize firebase using the config
 firebase.initializeApp(config);
 // export firebase.auth(); anywhere we want to use authentication
