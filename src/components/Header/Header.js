@@ -7,7 +7,10 @@ import { ReactComponent as Logo } from "../../assets/crown.svg";
 import { auth } from "../../firebase/firebase.utils";
 // import connect higher order function
 import { connect } from "react-redux";
-const Header = ({ currentUser }) => (
+// import the cart components
+import CartIcon from "../CartIcon/CartIcon";
+import CartDropDown from "../CartDropDown/CartDropDown";
+const Header = ({ currentUser, hidden }) => (
   <div className="header">
     <Link className="logo-container" to="/">
       <Logo className="logo" />
@@ -29,12 +32,22 @@ const Header = ({ currentUser }) => (
           SIGN IN
         </Link>
       )}
+      <CartIcon />
     </div>
+    {/* place CartDropDown component below options*/}
+    {/*selectively display CartDropDown only if hidden prop is not true */}
+    {hidden ? null : <CartDropDown />}
   </div>
 );
 // we get the current state in this function
-const mapStateToProps = (state) => ({
-  currentUser: state.user.currentUser,
+// const mapStateToProps = (state) => ({
+//   currentUser: state.user.currentUser,
+//   hidden: state.cart.hidden,
+// });
+//we can destructure nested elements like below
+const mapStateToProps = ({ user: { currentUser }, cart: { hidden } }) => ({
+  currentUser,
+  hidden,
 });
 //connect is a higher order component to which we pass in our Header component
 // pass in 2 functions to connect and then to the resulting function we pass in our component
