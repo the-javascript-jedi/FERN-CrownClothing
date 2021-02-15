@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage";
 import ShopPage from "./pages/Shop/ShopPage";
 import Header from "./components/Header/Header";
@@ -60,16 +60,32 @@ class App extends React.Component {
           <Route path="/" exact={true} component={HomePage} />
           <Route path="/shop" component={ShopPage} />
           <Route path="/home" component={HomePage} />
-          <Route path="/signIn" component={SignInSignUp} />
+          {/* <Route path="/signIn" component={SignInSignUp} /> */}
+          {/* redirect user if logged in  */}
+          <Route
+            exact
+            path="/signIn"
+            render={() =>
+              this.props.currentUser ? <Redirect to="/" /> : <SignInSignUp />
+            }
+          />
         </Switch>
       </div>
     );
   }
 }
+// we use mapStateToProps to access the component state
+//we destructure the user state and get access to this.props.currentUser
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser,
+});
 // we get access to dispatch keyword throuch which we can fire an action
 const mapDispatchToProps = (dispatch) => ({
   setCurrentUser: (user) => dispatch(setCurrentUser(user)),
 });
 
-// we pass null as first argument since currently we do not need any state
-export default connect(null, mapDispatchToProps)(App);
+// we pass null as first argument if we do not need any state
+// export default connect(null, mapDispatchToProps)(App);
+
+//we pass mapStateToProps to access state and mapDispatchToProps to fire an action
+export default connect(mapStateToProps, mapDispatchToProps)(App);
