@@ -5,32 +5,38 @@ import { Link } from "react-router-dom";
 import { ReactComponent as Logo } from "../../assets/crown.svg";
 // auth firebase
 import { auth } from "../../firebase/firebase.utils";
-function Header({ currentUser }) {
-  return (
-    <div className="header">
-      <Link className="logo-container" to="/">
-        <Logo className="logo" />
+// import connect higher order function
+import { connect } from "react-redux";
+const Header = ({ currentUser }) => (
+  <div className="header">
+    <Link className="logo-container" to="/">
+      <Logo className="logo" />
+    </Link>
+    <div className="options">
+      <Link className="option" to="/shop">
+        Shop
       </Link>
-      <div className="options">
-        <Link className="option" to="/shop">
-          Shop
+      <Link className="option" to="/contact">
+        Contact
+      </Link>
+      {/* if a currentUser data is present  */}
+      {currentUser ? (
+        <div className="option" onClick={() => auth.signOut()}>
+          SIGN OUT
+        </div>
+      ) : (
+        <Link to="/signin" className="option">
+          SIGN IN
         </Link>
-        <Link className="option" to="/contact">
-          Contact
-        </Link>
-        {/* if a currentUser data is present  */}
-        {currentUser ? (
-          <div className="option" onClick={() => auth.signOut()}>
-            SIGN OUT
-          </div>
-        ) : (
-          <Link to="/signin" className="option">
-            SIGN IN
-          </Link>
-        )}
-      </div>
+      )}
     </div>
-  );
-}
-
-export default Header;
+  </div>
+);
+// we get the current state in this function
+const mapStateToProps = (state) => ({
+  currentUser: state.user.currentUser,
+});
+//connect is a higher order component to which we pass in our Header component
+// pass in 2 functions to connect and then to the resulting function we pass in our component
+//the first argument to connect is mapStateToProps- this is the function that allows us to access state, the state being our root reducer
+export default connect(mapStateToProps)(Header);
