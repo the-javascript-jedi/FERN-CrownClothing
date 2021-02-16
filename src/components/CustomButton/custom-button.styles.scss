@@ -13,6 +13,9 @@
   font-weight: bolder;
   border: none;
   cursor: pointer;
+  // anything inside button will always be centered
+  display: flex;
+  justify-content: center;
   // & means no space between - .custom-button:hover
   &:hover {
     background-color: white;
@@ -24,6 +27,18 @@
     color: #fff;
     &:hover {
       background-color: #357ae8;
+      border: none;
+    }
+  }
+  //.custom-button.inverted
+  &.inverted {
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    //.custom-button.inverted:hover
+    &:hover {
+      background-color: black;
+      color: white;
       border: none;
     }
   }

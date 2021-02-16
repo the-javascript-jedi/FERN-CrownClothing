@@ -1,6 +1,7 @@
 import { UserActionTypes } from "./userTypes";
 const INITIAL_STATE = {
   currentUser: null,
+  cartItems: [],
 };
 // null is considered a value and if null is passsed then initial state will not be passsed on as default
 
