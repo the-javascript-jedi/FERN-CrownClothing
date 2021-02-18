@@ -1,5 +1,5 @@
 import CartActionTypes from "./cartTypes";
-import { addItemToCart } from "./cartUtils";
+import { addItemToCart, removeItemFromCart } from "./cartUtils";
 const INITIAL_STATE = {
   hidden: true,
   cartItems: [],
@@ -21,7 +21,13 @@ const cartReducer = (state = INITIAL_STATE, action) => {
         //a utility function to add items to cart
         cartItems: addItemToCart(state.cartItems, action.payload),
       };
-    // remove item from array
+    //remove item if quantity is less than one
+    case CartActionTypes.REMOVE_ITEM:
+      return {
+        ...state,
+        cartItems: removeItemFromCart(state.cartItems, action.payload),
+      };
+    // remove item from array in checkout component
     case CartActionTypes.CLEAR_ITEM_FROM_CART:
       return {
         ...state,
