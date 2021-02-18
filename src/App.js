@@ -10,6 +10,10 @@ import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 import { connect } from "react-redux";
 // import setCurrentUser action
 import { setCurrentUser } from "./redux/user/userAction";
+//import from reselect library
+import { createStructuredSelector } from "reselect";
+//import the memoized selector
+import { selectCurrentUser } from "./redux/user/userSelector";
 class App extends React.Component {
   unsubscribeFromAuth = null;
   // componentDidMount() method runs after the component output has been rendered to the DOM
@@ -76,8 +80,8 @@ class App extends React.Component {
 }
 // we use mapStateToProps to access the component state
 //we destructure the user state and get access to this.props.currentUser
-const mapStateToProps = ({ user }) => ({
-  currentUser: user.currentUser,
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser,
 });
 // we get access to dispatch keyword throuch which we can fire an action
 const mapDispatchToProps = (dispatch) => ({

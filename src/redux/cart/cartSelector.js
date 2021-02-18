@@ -8,6 +8,12 @@ export const selectCartItems = createSelector(
   [selectCart],
   (cart) => cart.cartItems
 );
+// memoized function to return the hidden piece of state
+export const selectCartHidden = createSelector(
+  [selectCart],
+  (cart) => cart.hidden
+);
+
 //reduce the cartItems quantity into a single value
 export const selectCartItemsCount = createSelector(
   // reference the selectCartItems output selector which will return the cartItems value

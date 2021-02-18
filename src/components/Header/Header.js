@@ -7,6 +7,11 @@ import { ReactComponent as Logo } from "../../assets/crown.svg";
 import { auth } from "../../firebase/firebase.utils";
 // import connect higher order function
 import { connect } from "react-redux";
+//import from reselect library
+import { createStructuredSelector } from "reselect";
+//import the memoized selector
+import { selectCurrentUser } from "../../redux/user/userSelector";
+import { selectCartHidden } from "../../redux/cart/cartSelector";
 // import the cart components
 import CartIcon from "../CartIcon/CartIcon";
 import CartDropDown from "../CartDropDown/CartDropDown";
@@ -44,11 +49,18 @@ const Header = ({ currentUser, hidden }) => (
 //   currentUser: state.user.currentUser,
 //   hidden: state.cart.hidden,
 // });
-//we can destructure nested elements like below
-const mapStateToProps = ({ user: { currentUser }, cart: { hidden } }) => ({
-  currentUser,
-  hidden,
+// mapStateToProps - we can destructure nested elements like below
+// const mapStateToProps = ({ user: { currentUser }, cart: { hidden } }) => ({
+//   currentUser,
+//   hidden,
+// });
+/* mapsStateToProps using createStructuredSelector-reselect library */
+//pass the memoized state values to state
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser,
+  hidden: selectCartHidden,
 });
+
 //connect is a higher order component to which we pass in our Header component
 // pass in 2 functions to connect and then to the resulting function we pass in our component
 //the first argument to connect is mapStateToProps- this is the function that allows us to access state, the state being our root reducer
