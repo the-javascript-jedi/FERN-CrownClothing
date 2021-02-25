@@ -7,6 +7,7 @@ import storage from "redux-persist/lib/storage";
 //reducers
 import userReducer from "../redux/user/userReducer";
 import cartReducer from "../redux/cart/cartReducer";
+import directoryReducer from "../redux/directory/directoryReducer";
 // PersistConfig
 const persistConfig = {
   key: "root",
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   // user state is persisited by firebase
   user: userReducer,
   cart: cartReducer,
+  directory: directoryReducer,
 });
 // export the persistReducer
 export default persistReducer(persistConfig, rootReducer);
