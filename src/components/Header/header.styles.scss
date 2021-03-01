@@ -6,6 +6,13 @@
   justify-content: space-between;
   margin-bottom: 25px;
 
+  #dropDownContainer {
+    position: absolute;
+    right: 68px;
+    top: 75px;
+    z-index: 5;
+  }
+
   .logo-container {
     height: 100%;
     width: 70px;
