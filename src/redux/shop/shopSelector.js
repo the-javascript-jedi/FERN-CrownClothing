@@ -1,14 +1,4 @@
 import { createSelector } from "reselect";
-//create a collection id map to map the id to the url params values
-//we will pass in the string and use the string value as a dynamic value to get the respective id
-const COLLECTION_ID_MAP = {
-  hats: 1,
-  sneakers: 2,
-  jackets: 3,
-  womens: 4,
-  mens: 5,
-};
-
 // create a selector
 //this selector will return the shop state
 const selectShop = (state) => state.shop;
@@ -19,14 +9,20 @@ export const selectCollections = createSelector(
   [selectShop],
   (shop) => shop.collections
 );
+// convert our object to array
+//get the selectCollections object
+export const selectCollectionsForPreview = createSelector(
+  [selectCollections],
+  //Object.keys(collections) = [hats,jackets,mens,sneakers,womans]
+  //collections[key] collections[hats]={id(pin):1title(pin):"Hats"routeName(pin):"hats,items:[...]"}
+  (collections) => Object.keys(collections).map((key) => collections[key])
+);
 //we pass in the urlParameter from frontend and we return the createSelector--cold curry function
 //--it's a function which returns another function
 export const selectCollection = (collectionUrlParam) =>
   //createSelector returns a function that takes a state and runs it through the selector flow
   //collections is the state we are passing in
-  createSelector([selectCollections], (collections) =>
-    collections.find(
-      (collection) => collection.id === COLLECTION_ID_MAP[collectionUrlParam]
-      //COLLECTION_ID_MAP[hats]=1
-    )
+  createSelector(
+    [selectCollections],
+    (collections) => collections[collectionUrlParam]
   );
