@@ -6,7 +6,7 @@ import ShopPage from "./pages/Shop/ShopPage";
 import Header from "./components/Header/Header";
 import SignInSignUp from "./components/SignInSignUp/SignInSignUp";
 import CheckOutPage from "./pages/CheckOutPage/CheckOutPage";
-
+//import firebase functions
 import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 // import connect
 import { connect } from "react-redux";
@@ -58,22 +58,22 @@ class App extends React.Component {
   }
   render() {
     return (
-      <div className="App">
+      <div className='App'>
         {/* header component outside switch*/}
         {/* pass date to header so that we know that if user is signed in */}
         <Header />
         <Switch>
-          <Route path="/" exact={true} component={HomePage} />
-          <Route path="/shop" component={ShopPage} />
-          <Route path="/home" component={HomePage} />
-          <Route path="/checkout" exact component={CheckOutPage} />
+          <Route path='/' exact={true} component={HomePage} />
+          <Route path='/shop' component={ShopPage} />
+          <Route path='/home' component={HomePage} />
+          <Route path='/checkout' exact component={CheckOutPage} />
           {/* <Route path="/signIn" component={SignInSignUp} /> */}
           {/* redirect user if logged in  */}
           <Route
             exact
-            path="/signIn"
+            path='/signIn'
             render={() =>
-              this.props.currentUser ? <Redirect to="/" /> : <SignInSignUp />
+              this.props.currentUser ? <Redirect to='/' /> : <SignInSignUp />
             }
           />
         </Switch>

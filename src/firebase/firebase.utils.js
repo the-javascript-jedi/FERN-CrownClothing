@@ -45,6 +45,58 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
 };
 // initialize firebase using the config
 firebase.initializeApp(config);
+//add collection from json to firebase db
+//async is used because batch will return a promise
+export const addCollectionAndDocuments = async (
+  collectionKey,
+  objectstoAdd
+) => {
+  // create collection using collectionKey
+  //firebase will return as a ref object
+  const collectionRef = firestore.collection(collectionKey);
+  console.log("collectionRef", collectionRef);
+  // batch the request so all the data will be saved in a single go
+  const batch = firestore.batch();
+  objectstoAdd.forEach((obj) => {
+    const newDocref = collectionRef.doc();
+    console.log("newDocref", newDocref);
+    batch.set(newDocref, obj);
+  });
+  // commit will fire of our batch request, it will return a promise
+  return await batch.commit();
+};
+export const convertCollectionsSnapshotToMapCollections = (collections) => {
+  const transformedCollection = collections.docs.map((doc) => {
+    const { title, items } = doc.data();
+    return {
+      //encodeURI js method -pass it a string and it will give us back a string where any characters a url cannot actually handle or process such as certain symbol,spaces or whatever that we never see in a url, encodeURI convert it into a version which url can read
+      routeName: encodeURI(title.toLowerCase()),
+      id: doc.id,
+      title,
+      items,
+    };
+  });
+  console.log(
+    "transformedCollection--as array of objects",
+    transformedCollection
+  );
+  // reduce example
+  /*
+  const array1 = [1, 2, 3, 4];
+  // 5 + 1 + 2 + 3 + 4
+  console.log(array1.reduce(reducer, 5));
+  // expected output: 15
+  */
+  // convert array of objects to object of objects
+  // keep the object property as a titlename(from the array) for each respective object
+  //{hats:{id:1,title:hats:...},jackets:{id:2,title:jackets:...},...}
+  return transformedCollection.reduce((accumulator, collection) => {
+    // set property of object key as title for each respective collection
+    accumulator[collection.title.toLowerCase()] = collection;
+    return accumulator;
+    // pass in initial object
+  }, {});
+};
 // export firebase.auth(); anywhere we want to use authentication
 export const auth = firebase.auth();
 // export firebase db
