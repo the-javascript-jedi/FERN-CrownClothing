@@ -1,7 +1,9 @@
-import SHOP_DATA from "./shop.data";
+// import SHOP_DATA from "./shop.data";
 import shopActionTypes from "./shop.types";
 const INITIAL_STATE = {
-  collections: SHOP_DATA,
+  // collections: SHOP_DATA,
+  //collections are default null because the collections data is loaded from firebase
+  collections: null,
 };
 const shopReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {

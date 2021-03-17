@@ -15,14 +15,15 @@ export const selectCollectionsForPreview = createSelector(
   [selectCollections],
   //Object.keys(collections) = [hats,jackets,mens,sneakers,womans]
   //collections[key] collections[hats]={id(pin):1title(pin):"Hats"routeName(pin):"hats,items:[...]"}
-  (collections) => Object.keys(collections).map((key) => collections[key])
+  /*if collections existreturn collections else return empty array */
+  (collections) =>
+    collections ? Object.keys(collections).map((key) => collections[key]) : []
 );
 //we pass in the urlParameter from frontend and we return the createSelector--cold curry function
 //--it's a function which returns another function
 export const selectCollection = (collectionUrlParam) =>
   //createSelector returns a function that takes a state and runs it through the selector flow
   //collections is the state we are passing in
-  createSelector(
-    [selectCollections],
-    (collections) => collections[collectionUrlParam]
+  createSelector([selectCollections], (collections) =>
+    collections ? collections[collectionUrlParam] : null
   );
