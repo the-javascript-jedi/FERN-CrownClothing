@@ -4,12 +4,16 @@ import { connect } from "react-redux";
 // import CollectionsOverview and CategoryPage
 import CollectionsOverview from "../../components/CollectionsOverview/CollectionsOverview";
 import CollectionPage from "../CollectionPage/CollectionPage";
-import {
-  firestore,
-  convertCollectionsSnapshotToMapCollections,
-} from "../../firebase/firebase.utils";
 // import action
-import { updateCollections } from "../../redux/shop/shop.actions";
+import { fetchCollectionsStartAsync } from "../../redux/shop/shop.actions";
+// import selector
+import { createStructuredSelector } from "reselect";
+//import isCollectionFetching from selector
+import {
+  //selectIsCollectionFetching,
+  selectIsCollectionsLoaded,
+} from "../../redux/shop/shopSelector";
+
 // import the hoc
 import WithSpinner from "../../components/WithSpinner/WithSpinner";
 //this below code will give us a new component wrapped around with the component that we passed in
@@ -24,30 +28,12 @@ class ShopPage extends React.Component {
   unsubscribeFromSnapShot = null;
   componentDidMount() {
     // destructure props for redux
-    const { updateCollections } = this.props;
-
-    const collectionRef = firestore.collection("collections");
-    // display the converted data from the firestore
-    this.unsubscribeFromSnapShot = collectionRef.onSnapshot(
-      async (snapshot) => {
-        const collectionsMap = convertCollectionsSnapshotToMapCollections(
-          snapshot
-        );
-        //commit tests
-        // pass the collectionsMap from firebase to the action
-        updateCollections(collectionsMap);
-        console.log(
-          "collectionsMap--converted object--shopPage",
-          collectionsMap
-        );
-        this.setState({ loading: false });
-      }
-    );
+    const { fetchCollectionsStartAsync } = this.props;
+    fetchCollectionsStartAsync();
   }
   render() {
-    const { match } = this.props;
-    // destructure loading from state
-    const { loading } = this.state;
+    const { match, isCollectionLoaded } = this.props;
+
     console.log("match--shoppage", match);
     console.log("match.path", match.path);
     return (
@@ -56,22 +42,34 @@ class ShopPage extends React.Component {
           exact
           path={`${match.path}`}
           render={(props) => (
-            <CollectionOverviewWithSpinner isLoading={loading} {...props} />
+            <CollectionOverviewWithSpinner
+              //empty object returns true, !!{} = true // object with data will contain false
+              //so for an object which contains data we will get false, so we need to pass the falsey value to check if collection is loaded
+              //isLoading={true}
+              isLoading={!isCollectionLoaded}
+              {...props}
+            />
           )}
         />
         <Route
           exact
           path={`${match.path}/:collectionId`}
           render={(props) => (
-            <CollectionPageWithSpinner isLoading={loading} {...props} />
+            <CollectionPageWithSpinner
+              isLoading={!isCollectionLoaded}
+              {...props}
+            />
           )}
         />
       </div>
     );
   }
 }
-const mapDispatchToProps = (dispatch) => ({
-  updateCollections: (collectionsMap) =>
-    dispatch(updateCollections(collectionsMap)),
+const mapStateToProps = createStructuredSelector({
+  //isCollectionFetching: selectIsCollectionFetching,
+  isCollectionLoaded: selectIsCollectionsLoaded,
 });
-export default connect(null, mapDispatchToProps)(ShopPage);
+const mapDispatchToProps = (dispatch) => ({
+  fetchCollectionsStartAsync: () => dispatch(fetchCollectionsStartAsync()),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(ShopPage);

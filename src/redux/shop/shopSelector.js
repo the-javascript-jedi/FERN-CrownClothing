@@ -20,10 +20,21 @@ export const selectCollectionsForPreview = createSelector(
     collections ? Object.keys(collections).map((key) => collections[key]) : []
 );
 //we pass in the urlParameter from frontend and we return the createSelector--cold curry function
-//--it's a function which returns another function
+//curry function--it's a function which returns another function
 export const selectCollection = (collectionUrlParam) =>
   //createSelector returns a function that takes a state and runs it through the selector flow
   //collections is the state we are passing in
   createSelector([selectCollections], (collections) =>
     collections ? collections[collectionUrlParam] : null
   );
+// selector for checking isLoading flag
+export const selectIsCollectionFetching = createSelector(
+  [selectShop],
+  (shop) => shop.isFetching
+);
+// selector for checking the collection is loaded
+export const selectIsCollectionsLoaded = createSelector(
+  [selectShop],
+  // !!{} = true ====> an empty object will return true
+  (shop) => !!shop.collections
+);
